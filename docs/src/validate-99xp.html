@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html class="dark">
+    <head>
+        <title>validate-99xp.js</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" media="all" href="/public/stylesheets/normalize.css" />
+        <link rel="stylesheet" media="all" href="../docco.css" />
+        <link rel="stylesheet" media="all" href="https://public.99xp.org/styles/color-modes.css" />
+        <link rel="stylesheet" media="all" href="https://public.99xp.org/styles/design.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="page">
+
+                <div class="header">
+                    <small class="color-modes">
+                        <a href="#" class="color-mode dark" onclick="event.preventDefault(); document.getElementsByTagName('html')[0].classList.add('dark'); document.getElementsByTagName('html')[0].classList.remove('light')">&nbsp;</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="#" class="color-mode light" onclick="event.preventDefault(); document.getElementsByTagName('html')[0].classList.remove('dark'); document.getElementsByTagName('html')[0].classList.add('light')">&nbsp;</a>
+                    </small>
+                    
+                    <h1>validate-99xp.js</h1>
+                    
+
+                    
+                </div>
+
+                
+                    
+                    <p><a href="https://github.com/brunnofoggia/validate-99xp">validate-99xp</a> is the automated way
+to keep your json or model attributes valid. See <a href="https://github.com/brunnofoggia/v8n-99xp">v8n-99xp</a>
+and <a href="https://imbrn.github.io/v8n/">v8n</a> to know more about validators available.</p>
+
+                    
+                    
+                    
+                    <h2 id="instructions">Instructions</h2>
+
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <p>To make a field mandatory set it equal to [] or set your rules instead</p>
+
+                    
+                    
+                    
+                    <pre><code><span class="hljs-keyword">var</span> validations = { <span class="hljs-attr">name</span>: [] }</code></pre>
+                    
+                    
+                    
+                    <pre><code><span class="hljs-keyword">var</span> validations = { <span class="hljs-attr">name</span>: [ [v8n().fullname(), <span class="hljs-string">'Enter your fullname'</span>] ] }</code></pre>
+                    
+                    
+                    
+                    <p>To make a field not mandatory you can either no list it in your stack of field validations of set it to false</p>
+
+                    
+                    
+                    
+                    <pre><code><span class="hljs-keyword">var</span> validations = { <span class="hljs-attr">name</span>: <span class="hljs-literal">false</span> }</code></pre>
+                    
+                    
+                    
+                    <p>Advanced topics: </p>
+
+                    
+                    
+                    
+                    <ol>
+<li>You can also send a function for validations so you can define your rules according to values received</li>
+</ol>
+
+                    
+                    
+                    
+                    <ol start="2">
+<li>On rule array you can send a third value that is called “getValue”.
+That will be a function responsible for return a value to be validated for that field </li>
+</ol>
+
+                    
+                    
+                    
+                    <pre><code><span class="hljs-keyword">var</span> validations = { <span class="hljs-attr">name</span>: [ [v8n().fullname(), <span class="hljs-string">'Enter your fullname'</span>, ()=&gt;{ <span class="hljs-keyword">return</span> <span class="hljs-string">'any other variable'</span>; }] ] }</code></pre>
+                    
+                    
+                    
+                    <ol start="3">
+<li>If you want to test a value received in realtime from user input set validateAll to false</li>
+</ol>
+
+                    
+                    
+                    
+                    <pre><code>vl.validate({ <span class="hljs-attr">name</span>: <span class="hljs-string">'99xp'</span> }, {<span class="hljs-attr">validateAll</span>: <span class="hljs-literal">false</span>})</code></pre>
+                    
+                    
+                    
+                    <ol start="4">
+<li>Complex objects works well too.</li>
+</ol>
+
+                    
+                    
+                    
+                    <pre><code><span class="hljs-keyword">var</span> json = {<span class="hljs-attr">name</span>: <span class="hljs-string">'99xp'</span>, <span class="hljs-attr">contacts</span>: [ {<span class="hljs-attr">email</span>: <span class="hljs-string">'team@99xp.org'</span>} , {<span class="hljs-attr">email</span>: <span class="hljs-string">'admin@99xp.org'</span>} ]};
+<span class="hljs-keyword">var</span> validations = {<span class="hljs-attr">name</span>: [], <span class="hljs-string">'contacts[][email]'</span>: []};
+vl.validate(json, {validations})</code></pre>
+                    
+                    
+                    
+                    <h2 id="examples">Examples</h2>
+
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <pre><code>- simple validation
+<span class="hljs-keyword">var</span> validations = { <span class="hljs-attr">name</span>: [ [v8n().fullname(), <span class="hljs-string">'Enter your fullname'</span>] ] }
+<span class="hljs-keyword">var</span> json = { <span class="hljs-attr">name</span>: <span class="hljs-string">'bruno'</span> }
+<span class="hljs-keyword">var</span> r;
+<span class="hljs-keyword">if</span>((r = vl.validate(json, {validations}))!==<span class="hljs-literal">null</span>) {
+     <span class="hljs-built_in">console</span>.log(r);
+}</code></pre>
+                    
+                    
+                    
+                    <pre><code>- making a field just mandatory
+<span class="hljs-keyword">var</span> validations = { <span class="hljs-attr">name</span>: [] }
+<span class="hljs-keyword">var</span> json = { <span class="hljs-attr">name</span>: <span class="hljs-string">'bruno'</span> }
+<span class="hljs-keyword">var</span> r;
+<span class="hljs-keyword">if</span>((r = vl.validate(json, {validations}))!==<span class="hljs-literal">null</span>) {
+     <span class="hljs-built_in">console</span>.log(r);
+}</code></pre>
+                    
+                    
+                    
+                    <h2 id="baseline-setup">Baseline setup</h2>
+
+                    
+                    
+                    
+                    
+                    
+                    <div class='highlight'><pre><span class="hljs-keyword">import</span> v8n <span class="hljs-keyword">from</span> <span class="hljs-string">'v8n-99xp'</span>;
+<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">'underscore-99xp'</span>;
+
+<span class="hljs-keyword">var</span> vl = {
+    <span class="hljs-attr">validator</span>: v8n,
+    <span class="hljs-attr">deepValueSearch</span>: _.deepValueSearch,</pre></div>
+                    
+                    
+                    
+                    <p>Core method the walk through fields and their set of rules applying each one of them</p>
+
+                    
+                    <div class='highlight'><pre>    validate(attrs, options = {}) {
+        options = _.defaults(options, {
+            <span class="hljs-attr">validateAll</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">validations</span>: {}
+        });
+        <span class="hljs-keyword">var</span> error = [],
+            validations = _.result2(<span class="hljs-keyword">this</span>, <span class="hljs-string">'validations'</span>, options.validations, [attrs, options], <span class="hljs-keyword">this</span>),
+            isRequired = {};</pre></div>
+                    
+                    
+                    
+                    <p>walk through fields listed as required</p>
+
+                    
+                    <div class='highlight'><pre>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> field <span class="hljs-keyword">in</span> validations) {
+            isRequired[field] = <span class="hljs-literal">true</span>;
+            <span class="hljs-keyword">var</span> value = <span class="hljs-keyword">this</span>.deepValueSearch(field, attrs);</pre></div>
+                    
+                    
+                    
+                    <p>working with array so we can validate lists like “contacts[][email]”</p>
+
+                    
+                    <div class='highlight'><pre>            !_.isArray(value) &amp;&amp; (value = [value]);</pre></div>
+                    
+                    
+                    
+                    <p>walk through field rule specifications</p>
+
+                    
+                    <div class='highlight'><pre>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> x <span class="hljs-keyword">in</span> validations[field]) {
+                <span class="hljs-keyword">let</span> validation = validations[field][x];
+
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> validation === <span class="hljs-string">'boolean'</span>) {
+                    isRequired[field] = validation;
+                    <span class="hljs-keyword">continue</span>;
+                }
+
+                error = error.concat(<span class="hljs-keyword">this</span>.validateValues(value, isRequired[field], options.validateAll, field, attrs, validation));
+            }</pre></div>
+                    
+                    
+                    
+                    <p>validate fields specified as required but without rule specification</p>
+
+                    
+                    <div class='highlight'><pre>            <span class="hljs-keyword">var</span> firstValue = _.isArray(value) ? _.first(value) : value;
+            <span class="hljs-keyword">if</span> ((!validations[field].length || (validations[field].length === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-keyword">typeof</span> validations[field][<span class="hljs-number">0</span>] === <span class="hljs-string">'boolean'</span>)) &amp;&amp;
+                <span class="hljs-keyword">this</span>.isRequiredNow(firstValue, isRequired[field], options.validateAll) &amp;&amp;
+                !<span class="hljs-keyword">this</span>.validator().minLength(<span class="hljs-number">1</span>).test(firstValue, attrs, field)) {
+                error.push([field, _.template(<span class="hljs-keyword">this</span>.requiredErrorMessage)({
+                    field
+                })]);
+            }
+        }
+
+        <span class="hljs-keyword">return</span> error.length &gt; <span class="hljs-number">0</span> ? error : <span class="hljs-literal">null</span>;
+    },
+    validateValues(value, isRequired, validateAll, field, attrs, validation) {
+        <span class="hljs-keyword">var</span> error = [];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> x <span class="hljs-keyword">in</span> value) {
+            error = error.concat(<span class="hljs-keyword">this</span>.validateValue(x, value[x], isRequired, validateAll, field, attrs, validation));
+        }
+
+        <span class="hljs-keyword">return</span> error;
+    },
+    validateValue(x, value, isRequired, validateAll, field, attrs, validation) {
+        <span class="hljs-keyword">var</span> error = [];
+        <span class="hljs-keyword">let</span> validationValue = <span class="hljs-keyword">this</span>.getValidationValue(validation, value, attrs, field);
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isRequiredNow(validationValue, isRequired, validateAll) &amp;&amp;
+            !<span class="hljs-keyword">this</span>.isValid(field, attrs, validation[<span class="hljs-number">0</span>], validationValue)) {
+            error.push([field, validation[<span class="hljs-number">1</span>], x]);
+        }
+
+        <span class="hljs-keyword">return</span> error;
+    },
+    <span class="hljs-keyword">get</span><span class="hljs-title">ValidationValue</span>(<span class="hljs-params">validation, value, attrs, field</span>) {
+        <span class="hljs-keyword">if</span> (!validation[<span class="hljs-number">2</span>] || <span class="hljs-keyword">typeof</span> validation[<span class="hljs-number">2</span>] !== <span class="hljs-string">'function'</span>) {
+            <span class="hljs-keyword">return</span> value;
+        }
+        <span class="hljs-keyword">return</span> validation[<span class="hljs-number">2</span>](value, attrs, field);
+    },</pre></div>
+                    
+                    
+                    
+                    <p>A field will be required when its present in the set of rules - even if its value is an empty [] - 
+AND (its present in the values received OR (its set as required and validate all was set true)) . 
+A bit confusing I know. But this will allow you to run validate in your form everytime a field is changed avoiding
+to alert of invalid fields that yet weren’t filled by the guest</p>
+
+                    
+                    <div class='highlight'><pre>    isRequiredNow(input, fieldRequired = <span class="hljs-literal">false</span>, validateAll) {</pre></div>
+                    
+                    
+                    
+                    <p>the field will be required only if its value was sent or if its set as required (even without a specific rule)</p>
+
+                    
+                    <div class='highlight'><pre>        <span class="hljs-keyword">return</span> (<span class="hljs-keyword">typeof</span> input !== <span class="hljs-string">'undefined'</span>) || (!!fieldRequired &amp;&amp; !!validateAll);
+    },</pre></div>
+                    
+                    
+                    
+                    <p>Apply the rule test to value received. value, attrs inputted and field name are sent to validation method - it can be handy.</p>
+
+                    
+                    <div class='highlight'><pre>    isValid(field, attrs, validation, value) {
+        <span class="hljs-keyword">if</span> (!validation.test(value)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    },
+    <span class="hljs-attr">requiredErrorMessage</span>: <span class="hljs-string">'Field *{{field}}* cannot be empty'</span>
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> vl;</pre></div>
+                    
+                    
+                    <div class="fleur">h</div>
+            </div>
+        </div>
+    </body>
+</html>
