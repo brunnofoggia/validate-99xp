@@ -172,7 +172,8 @@ vl.validate(json, {validations})</code></pre>
 
 <span class="hljs-keyword">var</span> vl = {
     <span class="hljs-attr">validator</span>: v8n,
-    <span class="hljs-attr">deepValueSearch</span>: _.deepValueSearch,</pre></div>
+    <span class="hljs-attr">deepValueSearch</span>: _.deepValueSearch,
+    <span class="hljs-attr">validateAll</span>: <span class="hljs-literal">true</span>,</pre></div>
                     
                     
                     
@@ -181,7 +182,7 @@ vl.validate(json, {validations})</code></pre>
                     
                     <div class='highlight'><pre>    validate(attrs, options = {}) {
         options = _.defaults(options, {
-            <span class="hljs-attr">validateAll</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">validateAll</span>: <span class="hljs-keyword">this</span>.validateAll,
             <span class="hljs-attr">validations</span>: {}
         });
         <span class="hljs-keyword">var</span> error = [],

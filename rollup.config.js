@@ -20,7 +20,7 @@ const banner = `/**
 * Copyright (c)${year} Bruno Foggia, 99xp.
 * Distributed under MIT license
 *
-* https://v8n.99xp.org
+* https://validate.99xp.org
 */\n\n`;
 
 const footer = '';
