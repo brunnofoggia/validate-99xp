@@ -185,6 +185,7 @@ vl.validate(json, {validations})</code></pre>
             <span class="hljs-attr">validateAll</span>: <span class="hljs-keyword">this</span>.validateAll,
             <span class="hljs-attr">validations</span>: {}
         });
+
         <span class="hljs-keyword">var</span> error = [],
             validations = _.result2(<span class="hljs-keyword">this</span>, <span class="hljs-string">'validations'</span>, options.validations, [attrs, options], <span class="hljs-keyword">this</span>),
             isRequired = {};</pre></div>
@@ -203,7 +204,7 @@ vl.validate(json, {validations})</code></pre>
                     <p>working with array so we can validate lists like “contacts[][email]”</p>
 
                     
-                    <div class='highlight'><pre>            !_.isArray(value) &amp;&amp; (value = [value]);</pre></div>
+                    <div class='highlight'><pre>            !_.isArray(value) &amp;&amp; !_.isJSON(value) &amp;&amp; (value = [value]);</pre></div>
                     
                     
                     
@@ -227,8 +228,8 @@ vl.validate(json, {validations})</code></pre>
 
                     
                     <div class='highlight'><pre>            <span class="hljs-keyword">var</span> firstValue = _.isArray(value) ? _.first(value) : value;
-            <span class="hljs-keyword">if</span> ((!validations[field].length || (validations[field].length === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-keyword">typeof</span> validations[field][<span class="hljs-number">0</span>] === <span class="hljs-string">'boolean'</span>)) &amp;&amp;
-                <span class="hljs-keyword">this</span>.isRequiredNow(firstValue, isRequired[field], options.validateAll) &amp;&amp;
+            <span class="hljs-keyword">if</span> ((!validations[field].length || (validations[field].length === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-keyword">typeof</span> validations[field][<span class="hljs-number">0</span>] === <span class="hljs-string">'boolean'</span>)) &amp;&amp; 
+                <span class="hljs-keyword">this</span>.isRequiredNow(firstValue, isRequired[field], options.validateAll) &amp;&amp; 
                 !<span class="hljs-keyword">this</span>.validator().minLength(<span class="hljs-number">1</span>).test(firstValue, attrs, field)) {
                 error.push([field, _.template(<span class="hljs-keyword">this</span>.requiredErrorMessage)({
                     field

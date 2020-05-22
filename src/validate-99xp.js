@@ -75,16 +75,18 @@ var vl = {
             validateAll: this.validateAll,
             validations: {}
         });
+
         var error = [],
             validations = _.result2(this, 'validations', options.validations, [attrs, options], this),
-            isRequired = {};
+            isRequired = {}; 
 
         // walk through fields listed as required
         for (let field in validations) {
             isRequired[field] = true;
             var value = this.deepValueSearch(field, attrs);
+
             // working with array so we can validate lists like "contacts[][email]"
-            !_.isArray(value) && (value = [value]);
+            !_.isArray(value) && !_.isJSON(value) && (value = [value]);
 
             // walk through field rule specifications
             for (let x in validations[field]) {
@@ -100,8 +102,8 @@ var vl = {
 
             // validate fields specified as required but without rule specification
             var firstValue = _.isArray(value) ? _.first(value) : value;
-            if ((!validations[field].length || (validations[field].length === 1 && typeof validations[field][0] === 'boolean')) &&
-                this.isRequiredNow(firstValue, isRequired[field], options.validateAll) &&
+            if ((!validations[field].length || (validations[field].length === 1 && typeof validations[field][0] === 'boolean')) && 
+                this.isRequiredNow(firstValue, isRequired[field], options.validateAll) && 
                 !this.validator().minLength(1).test(firstValue, attrs, field)) {
                 error.push([field, _.template(this.requiredErrorMessage)({
                     field

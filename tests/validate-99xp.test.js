@@ -15,9 +15,31 @@ test('simple json > first name sent > invalid !', () => {
     expect((v.validate(json, {validations}))===null).toBe(false);
 });
 
+// single complex 1
+test('single complex 1 json > fullname and email sent > valid !', () => {
+    var validations = { name: [], 'contacts[email]': [[v8n().email(), 'invalid email']] }
+    var json = { name: 'bruno foggia', contacts: {
+            email: 'team@99xp.org'
+        }
+    }
+
+    expect((v.validate(json, {validations}))===null).toBe(true);
+});
+
+// single complex 2
+test('single complex 2 json > fullname and email sent > valid !', () => {
+    var validations = { name: [], 'contacts[email][home]': [[v8n().email(), 'invalid email']] }
+    var json = { name: 'bruno foggia', contacts: {
+            email: {home: 'team@99xp.org'}
+        }
+    }
+
+    expect((v.validate(json, {validations}))===null).toBe(true);
+});
+
 // multiple
 test('mix json > fullname and email sent > valid !', () => {
-    var validations = { name: [], 'contacts[0][email]': [] }
+    var validations = { name: [], 'contacts[0][email]': [[v8n().email(), 'invalid email']] }
     var json = { name: 'bruno foggia', contacts: [
             {
                 email: 'team@99xp.org'
@@ -25,7 +47,6 @@ test('mix json > fullname and email sent > valid !', () => {
         ]
     }
 
-    console.log(v.validate(json, {validations}))
     expect((v.validate(json, {validations}))===null).toBe(true);
 });
 
