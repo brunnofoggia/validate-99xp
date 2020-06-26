@@ -50,7 +50,25 @@ test('mix json > fullname and email sent > valid !', () => {
     expect((v.validate(json, {validations}))===null).toBe(true);
 });
 
-test('mix json > fullname sent and email NOT sent > invalid !', () => {
+// multiple 2
+test('mix json 2 > partial validation with invalid email item on list sent > invalid !', () => {
+    var validations = { name: [], 'contacts[][email]': [[v8n().email(), 'invalid email']] }
+    var json = { name: 'bruno foggia', contacts: [
+            {
+                email: 'team@99xp.org'
+            },
+            {
+                email: 'team@.org'
+            }
+        ]
+    }
+    delete json.contacts[0];
+    var r = (v.validate(json, {validations}));
+    console.log(json, r);
+    expect(r!==null && r[0][2]==='1').toBe(true);
+});
+
+test('mix json 3 > fullname sent and email NOT sent > invalid !', () => {
     var validations = { name: [], 'contacts[0][email]': [] }
     var json = { name: 'bruno foggia', contacts: [
             {
@@ -61,7 +79,7 @@ test('mix json > fullname sent and email NOT sent > invalid !', () => {
     expect((v.validate(json, {validations}))===null).toBe(false);
 });
 
-test('mix json > fullname sent and one of two contact emails NOT sent > invalid !', () => {
+test('mix json 4 > fullname sent and one of two contact emails NOT sent > invalid !', () => {
     var validations = {
         name: [], 
         'contacts[][email]': [ [v8n().email(), 'Enter a valid email'] ] 
@@ -79,7 +97,7 @@ test('mix json > fullname sent and one of two contact emails NOT sent > invalid 
     expect((v.validate(json, {validations}))===null).toBe(false);
 });
 
-test('mix json > fullname sent and two contact emails sent > valid !', () => {
+test('mix json 5 > fullname sent and two contact emails sent > valid !', () => {
     var validations = {
         name: [], 
         'contacts[][email]': [ [v8n().email(), 'Enter a valid email'] ] 
@@ -97,7 +115,7 @@ test('mix json > fullname sent and two contact emails sent > valid !', () => {
     expect((v.validate(json, {validations}))===null).toBe(true);
 });
 
-test('mix json > fullname, two emails, address sent correctly > valid !', () => {
+test('mix json 6 > fullname, two emails, address sent correctly > valid !', () => {
     var validations = {
         name: [], 
         'contacts[][email]': [ [v8n().email(), 'Enter a valid email'] ],
@@ -126,7 +144,7 @@ test('mix json > fullname, two emails, address sent correctly > valid !', () => 
     expect((v.validate(json, {validations}))===null).toBe(true);
 });
 
-test('mix json > fullname, two emails, address sent without street > invalid !', () => {
+test('mix json 7 > fullname, two emails, address sent without street > invalid !', () => {
     var validations = {
         name: [], 
         'contacts[][email]': [ [v8n().email(), 'Enter a valid email'] ],

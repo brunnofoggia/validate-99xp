@@ -83,7 +83,7 @@ var vl = {
         // walk through fields listed as required
         for (let field in validations) {
             isRequired[field] = true;
-            var value = this.deepValueSearch(field, attrs);
+            var value = this.deepValueSearch(field, attrs, true);
 
             // working with array so we can validate lists like "contacts[][email]"
             !_.isArray(value) && !_.isJSON(value) && (value = [value]);
