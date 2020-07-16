@@ -15,6 +15,16 @@ test('simple json > first name sent > invalid !', () => {
     expect((v.validate(json, {validations}))===null).toBe(false);
 });
 
+// overriding validations
+test('overriding validations !', () => {
+    var validations = { name: [ [v8n().fullname(), 'Enter your fullname'] ] }
+    var overValidations = { name: [ [v8n().minLength(5), '5 char needed'] ] }
+    var json = { name: 'bruno' }
+
+    v.validations = validations;
+    expect((v.validate(json, {validations: overValidations}))===null).toBe(true);
+});
+
 // single complex 1
 test('single complex 1 json > fullname and email sent > valid !', () => {
     var validations = { name: [], 'contacts[email]': [[v8n().email(), 'invalid email']] }

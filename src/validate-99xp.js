@@ -72,12 +72,12 @@ var vl = {
     // Core method the walk through fields and their set of rules applying each one of them
     validate(attrs, options = {}) {
         options = _.defaults(options, {
-            validateAll: this.validateAll,
-            validations: {}
+            validateAll: this.validateAll
         });
 
         var error = [],
-            validations = _.result2(this, 'validations', options.validations, [attrs, options], this),
+        definedValidations = _.result2(this, 'validations', {}, [attrs, options], this),
+        validations = _.result2(options, 'validations', definedValidations, [attrs, options], this),
             isRequired = {}; 
 
         // walk through fields listed as required
