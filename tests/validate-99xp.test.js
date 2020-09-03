@@ -74,18 +74,15 @@ test('mix json 2 > partial validation with invalid email item on list sent > inv
     }
     delete json.contacts[0];
     var r = (v.validate(json, {validations}));
-    console.log(json, r);
     expect(r!==null && r[0][2]==='1').toBe(true);
 });
 
 test('mix json 3 > fullname sent and email NOT sent > invalid !', () => {
-    var validations = { name: [], 'contacts[0][email]': [] }
+    var validations = { name: [], 'contacts': [true], 'contacts[0][email]': [] }
     var json = { name: 'bruno foggia', contacts: [
-            {
-            },
         ]
     }
-
+    console.log('results', (v.validate(json, {validations})));
     expect((v.validate(json, {validations}))===null).toBe(false);
 });
 

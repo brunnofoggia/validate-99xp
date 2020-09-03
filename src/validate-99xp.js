@@ -85,28 +85,24 @@ var vl = {
             var value = this.deepValueSearch(field, attrs, true);
 
             // working with array so we can validate lists like "contacts[][email]"
-            !_.isArray(value) && !_.isJSON(value) && (value = [value]);
+            (
+                (!_.isArray(value) && !_.isJSON(value)) ||
+                (!/\[\]\[\w+\]/.test(field) && _.isArray(value)) // ensure to pass the correct value to test length of lists
+            ) && (value = [value]);
+            !_.isArray(validations[field]) && (validations[field] = [validations[field]]);
 
             // walk through field rule specifications
             for (let x in validations[field]) {
                 let validation = validations[field][x];
 
-                if (typeof validation === 'boolean') {
-                    isRequired[field] = validation;
-                    continue;
+                if (typeof validation[0] === 'boolean' || typeof validation[0] === 'undefined') {
+                    isRequired[field] = !(validation === false);
+                    if (!isRequired[field]) { continue; }
+                    // if is required, set default validation and error message for it
+                    validation = [this.validator().minLength(1), validation[1] || this.getRequiredErrorMessage(field), validation[2] || null];
                 }
 
                 error = error.concat(this.validateValues(value, isRequired[field], options.validateAll, field, attrs, validation));
-            }
-
-            // validate fields specified as required but without rule specification
-            var firstValue = _.isArray(value) ? _.first(value) : value;
-            if ((!validations[field].length || (validations[field].length === 1 && typeof validations[field][0] === 'boolean')) && 
-                this.isRequiredNow(firstValue, isRequired[field], options.validateAll) && 
-                !this.validator().minLength(1).test(firstValue, attrs, field)) {
-                error.push([field, _.template(this.requiredErrorMessage)({
-                    field
-                })]);
             }
         }
 
@@ -148,10 +144,13 @@ var vl = {
 
         // walk through fields listed as required
         for (let field in validations) {
+            !_.isArray(validations[field]) && (validations[field] = [validations[field]]);
             // walk through field rule specifications
             for (let x in validations[field]) {
                 let validation = validations[field][x];
-                if (!validation[0].test('')) {
+                if (typeof validation[0] === 'undefined' || 
+                    (typeof validation[0] === 'boolean' && validation[0] !== false) || 
+                    (typeof validation[0] === 'object' && !validation[0].test(''))) {
                     !(field in mandatory) && (mandatory[field] = []);
                     mandatory[field].push(validation);
                 }
@@ -175,7 +174,12 @@ var vl = {
         }
         return true;
     },
-    requiredErrorMessage: 'Field *{{field}}* cannot be empty'
+    requiredErrorMessage: 'Field *{{field}}* cannot be empty',
+    getRequiredErrorMessage(field) {
+      return _.template(this.requiredErrorMessage)({
+          field
+        });
+    },
 };
 
 export default vl;
