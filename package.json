@@ -54,7 +54,7 @@
     "terser": "^4.6.11"
   },
   "dependencies": {
-    "underscore-99xp": "^1.7.0",
-    "v8n-99xp": "^1.0.1"
+    "underscore-99xp": "^1.7.2",
+    "v8n-99xp": "^1.2.3"
   }
 }
