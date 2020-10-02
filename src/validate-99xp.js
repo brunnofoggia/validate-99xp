@@ -76,7 +76,8 @@ var vl = {
         });
 
         var error = [],
-        validations = this.getValidations(attrs, options),
+            validations = this.getValidations(attrs, options),
+            notEmptyValidation = this.validator().passesAnyOf(this.validator().minLength(1), this.validator().not.undefined().not.null().pattern(/.+/)),
             isRequired = {}; 
 
         // walk through fields listed as required
@@ -99,7 +100,7 @@ var vl = {
                     isRequired[field] = !(validation === false);
                     if (!isRequired[field]) { continue; }
                     // if is required, set default validation and error message for it
-                    validation = [this.validator().minLength(1), validation[1] || this.getRequiredErrorMessage(field), validation[2] || null];
+                    validation = [notEmptyValidation, validation[1] || this.getRequiredErrorMessage(field), validation[2] || null];
                 }
 
                 error = error.concat(this.validateValues(value, isRequired[field], options.validateAll, field, attrs, validation));

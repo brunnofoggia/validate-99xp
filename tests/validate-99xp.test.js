@@ -25,6 +25,15 @@ test('overriding validations !', () => {
     expect((v.validate(json, {validations: overValidations}))===null).toBe(true);
 });
 
+// automated nonempty validation
+test('automated nonempty validation > fullname and age not sent > valid !', () => {
+    var validations = { name: true, age: true }
+    var json = { };
+    var errors = v.validate(json, {validations});
+    
+    expect(typeof errors==='object' && errors.length === 2).toBe(true);
+});
+
 // single complex 1
 test('single complex 1 json > fullname and email sent > valid !', () => {
     var validations = { name: [], 'contacts[email]': [[v8n().email(), 'invalid email']] }
